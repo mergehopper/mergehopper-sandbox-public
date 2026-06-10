@@ -1,0 +1,18 @@
+version: "1"
+
+queue_rules:
+  - name: default
+    merge_method: merge
+    speculative_merge: true
+    checks_override:
+      - ci/test
+
+pull_request_rules:
+  - name: Queue PRs labeled queue
+    conditions:
+      - pr.state == "open"
+      - pr.draft == false
+      - has_label("queue")
+    actions:
+      - queue:
+          name: default
